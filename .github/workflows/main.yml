@@ -22,6 +22,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl grep sed
 
+      - name: Log in to GitHub Container Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Check latest GraalVM version for Java ${{ matrix.java_version }}
         id: check_version
         run: |
@@ -45,11 +49,6 @@ jobs:
             echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
             echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_ENV
           fi
-
-      - name: Log in to GitHub Container Registry
-        if: env.new_version == 'true'
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build and push Docker image
         if: env.new_version == 'true'
