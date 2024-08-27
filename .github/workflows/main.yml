@@ -27,7 +27,7 @@ jobs:
         run: |
           JAVA_VERSION=${{ matrix.java_version }}
           RELEASE_NOTES_URL="https://docs.oracle.com/en/graalvm/jdk/$JAVA_VERSION/docs/release-notes/"
-          LATEST_VERSION=$(curl -s "$RELEASE_NOTES_URL" | grep -oE "Oracle GraalVM for JDK $JAVA_VERSION [0-9]+\.[0-9]+\.[0-9]+" | sed "s/Oracle GraalVM for JDK $JAVA_VERSION //")
+          LATEST_VERSION=$(curl -s "$RELEASE_NOTES_URL" | grep -oE "Oracle GraalVM for JDK [0-9]+\.[0-9]+\.[0-9]+" | sed "s/Oracle GraalVM for JDK //")
           echo "Latest GraalVM version for Java $JAVA_VERSION: $LATEST_VERSION"
           
           if [ -z "$LATEST_VERSION" ]; then
