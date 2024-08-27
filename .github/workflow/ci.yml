@@ -5,8 +5,6 @@ on:
     branches:
       - main
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'  # Runs daily at midnight UTC
 
 jobs:
   check-and-build:
@@ -37,7 +35,7 @@ jobs:
             exit 1
           fi
           
-          EXISTING_VERSION=$(docker pull "${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:$JAVA_VERSION-$LATEST_VERSION" || echo "not found")
+          EXISTING_VERSION=$(docker pull "ghcr.io/${{ github.repository }}:$JAVA_VERSION-$LATEST_VERSION" || echo "not found")
           if [ "$EXISTING_VERSION" != "not found" ]; then
             echo "Version $LATEST_VERSION for Java $JAVA_VERSION already exists."
             echo "new_version=false" >> $GITHUB_ENV
@@ -47,9 +45,13 @@ jobs:
             echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
           fi
 
+      - name: Log in to GitHub Container Registry
+        if: env.new_version == 'true'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Build and push Docker image
         if: env.new_version == 'true'
         run: |
-          docker build --build-arg GRAALVM_VERSION=$LATEST_VERSION --build-arg JAVA_VERSION=${{ matrix.java_version }} -t "${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ matrix.java_version }}-$LATEST_VERSION" .
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker push "${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ matrix.java_version }}-$LATEST_VERSION"
+          docker build --build-arg GRAALVM_VERSION=$LATEST_VERSION --build-arg JAVA_VERSION=${{ matrix.java_version }} -t "ghcr.io/${{ github.repository }}:${{ matrix.java_version }}-$LATEST_VERSION" .
+          docker push "ghcr.io/${{ github.repository }}:${{ matrix.java_version }}-$LATEST_VERSION"
