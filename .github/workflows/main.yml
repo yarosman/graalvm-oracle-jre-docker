@@ -27,7 +27,7 @@ jobs:
         run: |
           JAVA_VERSION=${{ matrix.java_version }}
           RELEASE_NOTES_URL="https://docs.oracle.com/en/graalvm/jdk/$JAVA_VERSION/docs/release-notes/"
-          LATEST_VERSION=$(curl -s "$RELEASE_NOTES_URL" | grep -oE "Oracle GraalVM for JDK [0-9]+\.[0-9]+\.[0-9]+" | sed "s/Oracle GraalVM for JDK //")
+          LATEST_VERSION=$(curl -s "$RELEASE_NOTES_URL" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | head -n 1)
           echo "Latest GraalVM version for Java $JAVA_VERSION: $LATEST_VERSION"
           
           if [ -z "$LATEST_VERSION" ]; then
@@ -43,6 +43,7 @@ jobs:
             echo "New version detected for Java $JAVA_VERSION: $LATEST_VERSION"
             echo "new_version=true" >> $GITHUB_ENV
             echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+            echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_ENV
           fi
 
       - name: Log in to GitHub Container Registry
