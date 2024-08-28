@@ -60,5 +60,5 @@ jobs:
             GRAALVM_VERSION=$LATEST_VERSION
             JAVA_VERSION=${{ matrix.java_version }}
           tags: |
-            ghcr.io/${{ github.repository }}:${{ matrix.java_version }}-$LATEST_VERSION
+            ghcr.io/${{ github.repository }}:$LATEST_VERSION
           push: true
