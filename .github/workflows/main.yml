@@ -53,5 +53,6 @@ jobs:
       - name: Build and push Docker image
         if: env.new_version == 'true'
         run: |
-          docker build --build-arg GRAALVM_VERSION=$LATEST_VERSION --build-arg JAVA_VERSION=${{ matrix.java_version }} -t "ghcr.io/${{ github.repository }}:${{ matrix.java_version }}-$LATEST_VERSION" .
+          docker build --file Dockerfile --build-arg GRAALVM_VERSION=$LATEST_VERSION --build-arg JAVA_VERSION=${{ matrix.java_version }} -t "ghcr.io/${{ github.repository }}:${{ matrix.java_version }}-$LATEST_VERSION" .
           docker push "ghcr.io/${{ github.repository }}:${{ matrix.java_version }}-$LATEST_VERSION"
+
