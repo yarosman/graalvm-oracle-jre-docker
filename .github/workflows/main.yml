@@ -5,6 +5,9 @@ on:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+    # Runs every day at midnight (UTC)
+    - cron: "0 0 * * *"
 
 jobs:
   check-and-build:
