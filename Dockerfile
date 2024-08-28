@@ -1,12 +1,22 @@
 # Stage 1: Build stage to create a custom JRE
 # Use a build argument to dynamically specify the tag of the base image
-ARG TAG=21.0.4
+#ARG TAG=21.0.4
+ARG TAG=22.0.1-ol9-20240504
 FROM container-registry.oracle.com/graalvm/jdk:${TAG} as build-stage
+
+# Extract the Java major version and store it as an environment variable
+RUN export JAVA_MAJOR_VERSION=$(echo $TAG | cut -d'.' -f1) && \
+    echo "Java Major Version: $JAVA_MAJOR_VERSION"
+
+# Set the extracted value as an environment variable for subsequent stages
+ENV JAVA_MAJOR_VERSION=$(echo $TAG | cut -d'.' -f1)
 
 # Set environment variables based on the base image's structure
 ENV GRAALVM_HOME=/usr/lib64/graalvm/graalvm-java \
     JAVA_HOME=/usr/lib64/graalvm/graalvm-java \
     PATH="$JAVA_HOME/bin:$PATH"
+
+RUN microdnf install -y binutils && microdnf clean all
 
 # Verify that the jlink tool exists
 RUN echo "Using GraalVM with tag: $TAG" && \
