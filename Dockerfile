@@ -24,7 +24,7 @@ RUN echo "Using GraalVM with tag: $GRAALVM_VERSION ($JAVA_MAJOR_VERSION)" && \
 # Create a custom JRE using jlink
 RUN $JAVA_HOME/bin/jlink \
     --module-path $JAVA_HOME/jmods \
-    --add-modules java.base,java.logging,java.xml,java.sql,jdk.random \
+    --add-modules java.base,java.logging,java.xml,java.sql,jdk.random,java.instrument \
     --output /opt/java-runtime \
     --strip-debug \
     --no-man-pages \
