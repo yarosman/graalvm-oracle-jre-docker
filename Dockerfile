@@ -12,8 +12,8 @@ RUN export JAVA_MAJOR_VERSION=$(echo $TAG | cut -d'.' -f1) && \
 ENV JAVA_MAJOR_VERSION=$(echo $TAG | cut -d'.' -f1)
 
 # Set environment variables based on the base image's structure
-ENV GRAALVM_HOME=/usr/lib64/graalvm/graalvm-java \
-    JAVA_HOME=/usr/lib64/graalvm/graalvm-java \
+ENV GRAALVM_HOME=/usr/lib64/graalvm/graalvm-java$JAVA_MAJOR_VERSION \
+    JAVA_HOME=/usr/lib64/graalvm/graalvm-java$JAVA_MAJOR_VERSION \
     PATH="$JAVA_HOME/bin:$PATH"
 
 RUN microdnf install -y binutils && microdnf clean all
