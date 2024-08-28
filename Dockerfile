@@ -3,14 +3,10 @@
 #ARG TAG=21.0.4
 
 ARG GRAALVM_VERSION=22.0.1-ol9-20240504
+ARG JAVA_MAJOR_VERSION=22
 FROM container-registry.oracle.com/graalvm/jdk:${GRAALVM_VERSION} as build-stage
 
-RUN JAVA_MAJOR_VERSION=$(echo $GRAALVM_VERSION | cut -d'.' -f1) && \
-    echo "Java Major Version: $JAVA_MAJOR_VERSION" && \
-    echo "JAVA_MAJOR_VERSION=$JAVA_MAJOR_VERSION" > /envfile
-
 # Use ENV to persist the variable across stages
-ENV JAVA_MAJOR_VERSION=${JAVA_MAJOR_VERSION}
 
 # Set environment variables based on the base image's structure
 ENV GRAALVM_HOME=/usr/lib64/graalvm/graalvm-java$JAVA_MAJOR_VERSION \
@@ -20,7 +16,7 @@ ENV GRAALVM_HOME=/usr/lib64/graalvm/graalvm-java$JAVA_MAJOR_VERSION \
 RUN microdnf install -y binutils && microdnf clean all
 
 # Verify that the jlink tool exists
-RUN echo "Using GraalVM with tag: $GRAALVM_VERSION" && \
+RUN echo "Using GraalVM with tag: $GRAALVM_VERSION ($JAVA_MAJOR_VERSION)" && \
     echo "Checking jlink tool availability:" && \
     ls -l $JAVA_HOME/bin/jlink && \
     $JAVA_HOME/bin/java -version

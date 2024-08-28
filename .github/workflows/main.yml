@@ -58,7 +58,7 @@ jobs:
           file: Dockerfile
           build-args: |
             GRAALVM_VERSION=${{ env.LATEST_VERSION }}
-            JAVA_VERSION=${{ matrix.java_version }}
+            JAVA_MAJOR_VERSION=${{ matrix.java_version }}
             LATEST_VERSION=${{ env.LATEST_VERSION }}
           tags: |
             ghcr.io/${{ github.repository }}:${{ env.LATEST_VERSION }}
