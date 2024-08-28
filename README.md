@@ -7,14 +7,11 @@ of course, this one comes with Graal VM.
 
 ## Usage
 
-Since GraalVM's binaries are on the `$PATH`, you can invoke them easily. Or build a
-derived image based on this.
-
 ```
 $ docker pull ghcr.io/yarosman/graalvm-jre-docker:17.0.12
 ```
 
-See all available images at ???
+See all available images at https://github.com/yarosman/graalvm-jre-docker/pkgs/container/graalvm-jre-docker
 
 ## License
 
