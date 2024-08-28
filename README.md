@@ -11,7 +11,7 @@ Since GraalVM's binaries are on the `$PATH`, you can invoke them easily. Or buil
 derived image based on this.
 
 ```
-$ docker pull ghcr.io/yarosman/graalvm-jre-docker
+$ docker pull ghcr.io/yarosman/graalvm-jre-docker:17.0.12
 ```
 
 See all available images at ???
