@@ -4,12 +4,12 @@
 ARG TAG=22.0.1-ol9-20240504
 FROM container-registry.oracle.com/graalvm/jdk:${TAG} as build-stage
 
-# Extract the Java major version and store it as an environment variable
-RUN export JAVA_MAJOR_VERSION=$(echo $TAG | cut -d'.' -f1) && \
-    echo "Java Major Version: $JAVA_MAJOR_VERSION"
+RUN JAVA_MAJOR_VERSION=$(echo $TAG | cut -d'.' -f1) && \
+    echo "Java Major Version: $JAVA_MAJOR_VERSION" && \
+    echo "JAVA_MAJOR_VERSION=$JAVA_MAJOR_VERSION" > /envfile
 
-# Set the extracted value as an environment variable for subsequent stages
-ENV JAVA_MAJOR_VERSION=$(echo $TAG | cut -d'.' -f1)
+# Use ENV to persist the variable across stages
+ENV JAVA_MAJOR_VERSION=${JAVA_MAJOR_VERSION}
 
 # Set environment variables based on the base image's structure
 ENV GRAALVM_HOME=/usr/lib64/graalvm/graalvm-java$JAVA_MAJOR_VERSION \
