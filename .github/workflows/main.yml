@@ -53,6 +53,9 @@ jobs:
       - name: Build and push Docker image
         if: env.new_version == 'true'
         uses: docker/build-push-action@v6
+        env:
+          GRAALVM_VERSION: ${{ env.LATEST_VERSION }}
+          JAVA_VERSION: ${{ matrix.java_version }}
         with:
           #context: .
           file: Dockerfile
