@@ -1,8 +1,8 @@
 # Stage 1: Build stage to create a custom JRE
 # Use a build argument to dynamically specify the tag of the base image
 #ARG TAG=21.0.4
-ARG TAG=22.0.1-ol9-20240504
-FROM container-registry.oracle.com/graalvm/jdk:${TAG} as build-stage
+ARG GRAALVM_VERSION=22.0.1-ol9-20240504
+FROM container-registry.oracle.com/graalvm/jdk:${GRAALVM_VERSION} as build-stage
 
 RUN JAVA_MAJOR_VERSION=$(echo $TAG | cut -d'.' -f1) && \
     echo "Java Major Version: $JAVA_MAJOR_VERSION" && \
