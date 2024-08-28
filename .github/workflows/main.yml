@@ -54,7 +54,7 @@ jobs:
         if: env.new_version == 'true'
         uses: docker/build-push-action@v6
         with:
-          context: .
+          #context: .
           file: Dockerfile
           build-args: |
             LATEST_VERSION=${{ env.LATEST_VERSION }}
