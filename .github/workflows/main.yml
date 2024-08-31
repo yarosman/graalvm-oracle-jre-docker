@@ -15,6 +15,8 @@ jobs:
     strategy:
       matrix:
         java_version: [17, 21, 22]
+        include:
+          - platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x
 
     steps:
       - name: Set up Docker Buildx
@@ -44,7 +46,7 @@ jobs:
             exit 1
           fi
           
-          EXISTING_VERSION=$(docker pull "ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:$LATEST_VERSION" || echo "not found")
+          EXISTING_VERSION=$(docker manifest inspect "ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:$LATEST_VERSION" || echo "not found")
           if [ "$EXISTING_VERSION" != "not found" ]; then
             echo "Docker image with Tag `$LATEST_VERSION` already exists."
             echo "new_version=false" >> $GITHUB_ENV
@@ -68,7 +70,7 @@ jobs:
             GRAALVM_VERSION=${{ env.LATEST_VERSION }}
             JAVA_MAJOR_VERSION=${{ matrix.java_version }}
             LATEST_VERSION=${{ env.LATEST_VERSION }}
-          platforms: linux/amd64,linux/arm64/v8,linux/amd64,linux/ppc64le,linux/s390x
+          platforms: ${{ matrix.platforms }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:${{ env.LATEST_VERSION }}
           push: true
