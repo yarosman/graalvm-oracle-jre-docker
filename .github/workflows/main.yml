@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl grep sed
+          sudo apt-get install -y curl grep sed jq
 
       - name: Log in to GitHub Container Registry
         run: |
@@ -51,13 +51,20 @@ jobs:
           fi
 
           echo "Latest GraalVM version for Java $JAVA_VERSION: $LATEST_VERSION"
-          
-          EXISTING_VERSION=$(docker manifest inspect "ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:$LATEST_VERSION" 2>/dev/null || echo "not found")
-          if [ "$EXISTING_VERSION" != "not found" ]; then
-            echo "Docker image with Tag $LATEST_VERSION already exists."
+
+          PLATFORM_MISSING=false
+          for PLATFORM in ${{ matrix.platforms }}; do
+            if ! docker manifest inspect "ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:$LATEST_VERSION" | jq -e '.manifests[] | select(.platform.architecture == "'"${PLATFORM#*/}"'")' >/dev/null; then
+              PLATFORM_MISSING=true
+              echo "Platform $PLATFORM does not exist for $LATEST_VERSION."
+            fi
+          done
+
+          if [ "$PLATFORM_MISSING" = "false" ]; then
+            echo "Docker image with Tag $LATEST_VERSION for all platforms already exists."
             echo "new_version=false" >> $GITHUB_ENV
           else
-            echo "New version detected for Java $LATEST_VERSION"
+            echo "New version detected or missing platforms for Java $JAVA_VERSION: $LATEST_VERSION"
             echo "new_version=true" >> $GITHUB_ENV
             echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
             echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_ENV
