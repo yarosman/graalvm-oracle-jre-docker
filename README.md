@@ -1,4 +1,4 @@
-# GraalVM JRE docker container
+# GraalVM Oracle JRE docker container
 
 ## What’s inside
 
