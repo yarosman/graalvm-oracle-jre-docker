@@ -16,7 +16,12 @@ jobs:
       matrix:
         java_version: [17, 21, 22]
         include:
-          - platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x
+          - java_version: 17
+            platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x
+          - java_version: 21
+            platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x
+          - java_version: 22
+            platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x
 
     steps:
       - name: Set up Docker Buildx
@@ -64,12 +69,10 @@ jobs:
           GRAALVM_VERSION: ${{ env.LATEST_VERSION }}
           JAVA_VERSION: ${{ matrix.java_version }}
         with:
-          #context: .
           file: Dockerfile
           build-args: |
             GRAALVM_VERSION=${{ env.LATEST_VERSION }}
             JAVA_MAJOR_VERSION=${{ matrix.java_version }}
-            LATEST_VERSION=${{ env.LATEST_VERSION }}
           platforms: ${{ matrix.platforms }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:${{ env.LATEST_VERSION }}
