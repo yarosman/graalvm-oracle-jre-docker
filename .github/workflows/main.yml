@@ -45,8 +45,8 @@ jobs:
           
           echo "Latest GraalVM version for Java $JAVA_VERSION: $LATEST_VERSION"
           
-          EXISTING_VERSION=$(docker pull "ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:$LATEST_VERSION" || echo "not found")
-          if [ "$EXISTING_VERSION" != "not found" ]; then
+          # Use docker manifest inspect to check if the image already exists
+          if docker manifest inspect "ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:$LATEST_VERSION" > /dev/null 2>&1; then
             echo "Docker image with Tag `$LATEST_VERSION` already exists."
             echo "new_version=false" >> $GITHUB_ENV
           else
