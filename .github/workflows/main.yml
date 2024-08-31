@@ -44,16 +44,17 @@ jobs:
           JAVA_VERSION=${{ matrix.java_version }}
           RELEASE_NOTES_URL="https://docs.oracle.com/en/graalvm/jdk/$JAVA_VERSION/docs/release-notes/"
           LATEST_VERSION=$(curl -s "$RELEASE_NOTES_URL" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | head -n 1)
-          echo "Latest GraalVM version for Java $JAVA_VERSION: $LATEST_VERSION"
           
           if [ -z "$LATEST_VERSION" ]; then
             echo "Version not found" 
             exit 1
           fi
+
+          echo "Latest GraalVM version for Java $JAVA_VERSION: $LATEST_VERSION"
           
-          EXISTING_VERSION=$(docker manifest inspect "ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:$LATEST_VERSION" || echo "not found")
+          EXISTING_VERSION=$(docker manifest inspect "ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:$LATEST_VERSION" 2>/dev/null || echo "not found")
           if [ "$EXISTING_VERSION" != "not found" ]; then
-            echo "Docker image with Tag `$LATEST_VERSION` already exists."
+            echo "Docker image with Tag $LATEST_VERSION already exists."
             echo "new_version=false" >> $GITHUB_ENV
           else
             echo "New version detected for Java $LATEST_VERSION"
