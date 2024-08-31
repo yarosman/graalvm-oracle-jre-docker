@@ -47,7 +47,7 @@ jobs:
           
           # Use docker manifest inspect to check if the image already exists
           if docker manifest inspect "ghcr.io/${{ github.repository_owner }}/graalvm-oracle-jre:$LATEST_VERSION" > /dev/null 2>&1; then
-            echo "Docker image with Tag `$LATEST_VERSION` already exists."
+            echo "Docker image with Tag $LATEST_VERSION already exists."
             echo "new_version=false" >> $GITHUB_ENV
           else
             echo "New version detected for Java $LATEST_VERSION"
