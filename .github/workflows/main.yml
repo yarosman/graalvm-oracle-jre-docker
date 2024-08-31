@@ -17,11 +17,11 @@ jobs:
         java_version: [17, 21, 22]
         include:
           - java_version: 17
-            platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x
+            platforms: linux/amd64,linux/arm64/v8
           - java_version: 21
-            platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x
+            platforms: linux/amd64,linux/arm64/v8
           - java_version: 22
-            platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x
+            platforms: linux/amd64,linux/arm64/v8
 
     steps:
       - name: Set up Docker Buildx
