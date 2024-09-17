@@ -36,10 +36,8 @@ jobs:
         run: |
           JAVA_VERSION=${{ matrix.java_version }}
           RELEASE_NOTES_URL="https://docs.oracle.com/en/graalvm/jdk/$JAVA_VERSION/docs/release-notes/"
-          LATEST_VERSION=$(curl -s "$RELEASE_NOTES_URL" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | head -n 1)
-          
-          
-          
+          LATEST_VERSION=$(curl -s "$RELEASE_NOTES_URL" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | grep "^$JAVA_VERSION" | head -n 1)
+    
           if [ -z "$LATEST_VERSION" ]; then
             LATEST_VERSION="${JAVA_VERSION}.0.0"
             echo "No patch version found. Defaulting to: $LATEST_VERSION"
