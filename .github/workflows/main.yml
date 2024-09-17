@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java_version: [17, 21, 22]
+        java_version: [17, 21, 22, 23]
 
     steps:
       - name: Set up Docker Buildx
@@ -38,9 +38,13 @@ jobs:
           RELEASE_NOTES_URL="https://docs.oracle.com/en/graalvm/jdk/$JAVA_VERSION/docs/release-notes/"
           LATEST_VERSION=$(curl -s "$RELEASE_NOTES_URL" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | head -n 1)
           
+          
+          
           if [ -z "$LATEST_VERSION" ]; then
-            echo "Version not found" 
-            exit 1
+            LATEST_VERSION="${JAVA_VERSION}.0.0"
+            echo "No patch version found. Defaulting to: $LATEST_VERSION"
+          else
+            echo "Latest GraalVM version for Java $JAVA_VERSION: $LATEST_VERSION"
           fi
           
           echo "Latest GraalVM version for Java $JAVA_VERSION: $LATEST_VERSION"
