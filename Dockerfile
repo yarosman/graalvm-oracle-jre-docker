@@ -2,7 +2,7 @@
 # Use a build argument to dynamically specify the tag of the base image
 #ARG TAG=21.0.4
 ARG GRAALVM_VERSION=17.0.12
-FROM container-registry.oracle.com/graalvm/jdk:${GRAALVM_VERSION} as build-stage
+FROM container-registry.oracle.com/graalvm/jdk:${GRAALVM_VERSION} AS build-stage
 
 ARG JAVA_MAJOR_VERSION=17
 
