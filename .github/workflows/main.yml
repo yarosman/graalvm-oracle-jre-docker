@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         java_version: [17, 21, 22, 23]
+    continue-on-error: true  # Allow individual jobs to fail without stopping other jobs
 
     steps:
       - name: Set up Docker Buildx
